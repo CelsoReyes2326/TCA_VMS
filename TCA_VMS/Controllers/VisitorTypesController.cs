@@ -13,14 +13,28 @@ namespace TCA_VMS.Controllers
         public IActionResult Get_VisitorTypes()
         {
             List<VisitorType> lstVisitorTypes = TCA_VMS_DAO.GetVisitorTypes();
-            return Ok(lstVisitorTypes);
+            if(lstVisitorTypes == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(lstVisitorTypes);
+            }
         }
 
         [HttpGet("GetVisitorType/{id}")]
         public IActionResult Get_VisitorType(int id)
         {
             var _visitorType = TCA_VMS_DAO.GetVisitorType(id);
-            return Ok(_visitorType);
+            if(_visitorType == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(_visitorType);
+            }
         }
 
 

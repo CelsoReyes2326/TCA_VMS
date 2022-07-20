@@ -37,7 +37,6 @@ namespace TCA_VMS.Controllers
             }
         }
 
-
         [HttpPost("CreateBase")]
         public IActionResult Create_Base([FromBody] Base _base)
         {

@@ -20,7 +20,14 @@ namespace TCA_VMS.Controllers
         public IActionResult Get_VisitorsReports()
         {
             List<VisitorsReport> lstVisitorsReport = TCA_VMS_DAO.GetVisitorsReports();
-            return Ok(lstVisitorsReport);
+            if(lstVisitorsReport == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(lstVisitorsReport);
+            }
         }
 
 
@@ -28,7 +35,14 @@ namespace TCA_VMS.Controllers
         public IActionResult Get_VisitorsReport(int id)
         {
             var _visitorsReport = TCA_VMS_DAO.GetVisitorsReport(id);
-            return Ok(_visitorsReport);
+            if(_visitorsReport == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(_visitorsReport);
+            }
         }
 
         [HttpPut("UpdateVisitorsReportStatus")]

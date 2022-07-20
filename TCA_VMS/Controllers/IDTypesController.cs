@@ -13,14 +13,27 @@ namespace TCA_VMS.Controllers
         public IActionResult Get_IDTypes()
         {
             List<IDType> lstIDTypes = TCA_VMS_DAO.GetIDTypes();
-            return Ok(lstIDTypes);
+            if(lstIDTypes == null) 
+            {
+                return NotFound();
+            } 
+            else
+            {
+                return Ok(lstIDTypes);
+            }
         }
 
         [HttpGet("GetIDType/{id}")]
         public IActionResult Get_IDType(int id)
         {
             var _IDType = TCA_VMS_DAO.GetIDType(id);
-            return Ok(_IDType);
+            if(_IDType == null) 
+            { 
+                return NotFound(); 
+            } else
+            {
+                return Ok(_IDType);
+            }
         }
 
 

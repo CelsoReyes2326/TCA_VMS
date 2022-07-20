@@ -12,8 +12,15 @@ namespace TCA_VMS.Controllers
         [HttpGet("GetUserTypes")]
         public IActionResult Get_UserTypes()
         {
-            List<UserType> lstBases = TCA_VMS_DAO.GetUserTypes();
-            return Ok(lstBases);
+            List<UserType> lstUserTypes = TCA_VMS_DAO.GetUserTypes();
+            if(lstUserTypes == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(lstUserTypes);
+            }
         }
 
         [HttpGet("GetUserType/{id}")]

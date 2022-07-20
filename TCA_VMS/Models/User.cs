@@ -8,6 +8,7 @@
         public int WorkShift_Id { get; set; }
         public string User_Name { get; set; }
         public string User_Last_Name { get; set; }
+        public string UserName { get; set; }
         public string  User_Email { get; set; }
         public string  User_Password { get; set; }
         public bool User_Status { get; set; }

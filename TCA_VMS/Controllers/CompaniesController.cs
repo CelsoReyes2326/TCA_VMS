@@ -14,14 +14,28 @@ namespace TCA_VMS.Controllers
         public IActionResult Get_Companies()
         {
             List<Company> lstCompanies = TCA_VMS_DAO.GetCompanies();
-            return Ok(lstCompanies);
+            if(lstCompanies == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(lstCompanies);
+            }
         }
 
         [HttpGet("GetCompany/{id}")]
         public IActionResult Get_Company(int id)
         {
             var _company = TCA_VMS_DAO.GetCompany(id);
-            return Ok(_company);
+            if(_company == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(_company);
+            }
         }
 
 

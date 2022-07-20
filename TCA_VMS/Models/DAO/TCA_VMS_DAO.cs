@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace TCA_VMS.Models.DAO
 {
@@ -387,6 +389,7 @@ namespace TCA_VMS.Models.DAO
 
         public static Result StoreUser(User _user)
         {
+            _user.User_Password = GetSHA256(_user.User_Password);
             Result result = new Result();
             using (var bl = new Business())
             {
@@ -398,13 +401,57 @@ namespace TCA_VMS.Models.DAO
                       .AddParam("@UserType_Id", _user.UserType_Id)
                       .AddParam("@WorkShift_Id", _user.WorkShift_Id)
                       .AddParam("@User_Name", _user.User_Name)
+                      .AddParam("@UserName", _user.UserName)
+                      .AddParam("@User_Last_Name", _user.User_Last_Name)
+                      .AddParam("@User_Password", _user.User_Password)
+                      .AddParam("@User_Status", _user.User_Status)
+                      .AddParam("@StatusOut", DBNull.Value, true, 100)
+                      .AddParam("@MessageOut", DBNull.Value, true, 300)
+                      .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[Create_User]");
+
+                    if (bl.Exception != null)
+                    {
+                        result.State = 1;
+                        result.Message = bl.Exception;
+                    }
+                    else
+                    {
+                        result.State = Convert.ToInt32(bl.GetParamValue("@StatusOut"));
+                        result.Message = bl.GetParamValue("@MessageOut").ToString();
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    result.State = ex.State;
+                    result.Message = ex.Message;
+                }
+            }
+
+            return result;
+        }
+
+        public static Result StoreUserSA(User _user)
+        {
+            _user.User_Password = GetSHA256(_user.User_Password);
+            Result result = new Result();
+            using (var bl = new Business())
+            {
+                try
+                {
+
+                    bl
+                      .AddParam("@Base_Id", _user.Base_Id)
+                      .AddParam("@UserType_Id", _user.UserType_Id)
+                      .AddParam("@WorkShift_Id", _user.WorkShift_Id)
+                      .AddParam("@User_Name", _user.User_Name)
+                      .AddParam("@UserName", _user.UserName)
                       .AddParam("@User_Last_Name", _user.User_Last_Name)
                       .AddParam("@User_Email", _user.User_Email)
                       .AddParam("@User_Password", _user.User_Password)
                       .AddParam("@User_Status", _user.User_Status)
                       .AddParam("@StatusOut", DBNull.Value, true, 100)
                       .AddParam("@MessageOut", DBNull.Value, true, 300)
-                      .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[Create_User]");
+                      .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[Create_UserSA]");
 
                     if (bl.Exception != null)
                     {
@@ -444,6 +491,7 @@ namespace TCA_VMS.Models.DAO
                             {
                                 User_Id = Convert.ToInt32(item["User_Id"]),
                                 User_Name = item["User_Name"].ToString(),
+                                UserName = item["UserName"].ToString(),
                                 User_Status = Convert.ToBoolean(item["User_Status"]),
                                 Base_Name = item["Base_Name"].ToString(),
                                 UserType_Name = item["UserType_Name"].ToString(),
@@ -479,6 +527,7 @@ namespace TCA_VMS.Models.DAO
                     _user.UserType_Name = dtHeader.Rows[0]["UserType_Name"].ToString();
                     _user.Base_Name = dtHeader.Rows[0]["Base_Name"].ToString();
                     _user.User_Name = dtHeader.Rows[0]["User_Name"].ToString();
+                    _user.UserName = dtHeader.Rows[0]["UserName"].ToString();
                     _user.User_Status = Convert.ToBoolean(dtHeader.Rows[0]["User_Status"]);
                     _user.User_Creation_Date = Convert.ToDateTime(dtHeader.Rows[0]["User_Creation_Date"]);
                 }
@@ -501,6 +550,7 @@ namespace TCA_VMS.Models.DAO
                       .AddParam("@WorkShift_Id", _user.WorkShift_Id)
                       .AddParam("@User_Name", _user.User_Name)
                       .AddParam("@User_Last_Name", _user.User_Last_Name)
+                      .AddParam("@UserName", _user.UserName)
                       .AddParam("@User_Email", _user.User_Email)
                       .AddParam("@User_Password", _user.User_Password)
                       .AddParam("@User_Status", _user.User_Status)
@@ -528,11 +578,31 @@ namespace TCA_VMS.Models.DAO
             return result;
         }
 
+        public static User GetUserLogin(string userName, string password)
+        {
+            User _user = new User();
+            using (var bl = new Business())
+            {
+                DataTable dtHeader = bl
+                                   .AddParam("@UserName", userName)
+                                   .AddParam("@Password", password)
+                                   .ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[Login]");
+
+                if (dtHeader.Rows.Count > 0)
+                {
+                    _user.User_Id = Convert.ToInt32(dtHeader.Rows[0]["User_Id"]);
+                    _user.UserType_Id = Convert.ToInt32(dtHeader.Rows[0]["UserType_Id"]);
+                    _user.UserName = dtHeader.Rows[0]["UserName"].ToString();
+                }
+            }
+            return _user;
+        }
+
 
         #endregion
 
         #region Company
-        
+
         public static Result StoreCompany(Company _company)
         {
             Result result = new Result();
@@ -1073,5 +1143,17 @@ namespace TCA_VMS.Models.DAO
 
         #endregion
 
+        #region Methods
+        public static string GetSHA256(string str)
+        {
+            SHA256 sha256 = SHA256Managed.Create();
+            ASCIIEncoding encoding = new ASCIIEncoding();
+            byte[] stream = null;
+            StringBuilder sb = new StringBuilder();
+            stream = sha256.ComputeHash(encoding.GetBytes(str));
+            for (int i = 0; i < stream.Length; i++) sb.AppendFormat("{0:x2}", stream[i]);
+            return sb.ToString();
+        }
+        #endregion
     }
 }

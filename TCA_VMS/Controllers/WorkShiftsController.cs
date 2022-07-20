@@ -13,14 +13,28 @@ namespace TCA_VMS.Controllers
         public IActionResult Get_WorkShifts()
         {
             List<WorkShift> lstWorkShifts = TCA_VMS_DAO.GetWorkShifts();
-            return Ok(lstWorkShifts);
+            if(lstWorkShifts == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(lstWorkShifts);
+            }
         }
 
         [HttpGet("GetWorkShift/{id}")]
         public IActionResult Get_UserType(int id)
         {
             var _workShift = TCA_VMS_DAO.GetWorkShift(id);
-            return Ok(_workShift);
+            if(_workShift == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(_workShift);
+            }
         }
 
 
