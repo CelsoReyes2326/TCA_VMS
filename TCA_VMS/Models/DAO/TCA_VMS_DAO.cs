@@ -52,7 +52,7 @@ namespace TCA_VMS.Models.DAO
             {
                 try
                 {
-                    DataTable dt = bl.ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[Get_Bases]");
+                    DataTable dt = bl.ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[Get_Bas]");
                     if (dt.Rows.Count > 0)
                     {
                         lstBases = new List<Base>();

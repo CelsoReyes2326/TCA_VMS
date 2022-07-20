@@ -13,14 +13,28 @@ namespace TCA_VMS.Controllers
         public IActionResult Get_Bases()
         {
             List<Base> lstBases = TCA_VMS_DAO.GetBases();
-            return Ok(lstBases);
+            if(lstBases == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(lstBases);
+            }
         }
 
         [HttpGet("GetBase/{id}")]
         public IActionResult Get_Base(int id)
         {
             var _base = TCA_VMS_DAO.GetBase(id);
+            if(_base.Base_Id == 0)
+            {
+                return NotFound();
+            }
+            else
+            {
             return Ok(_base);
+            }
         }
 
 
