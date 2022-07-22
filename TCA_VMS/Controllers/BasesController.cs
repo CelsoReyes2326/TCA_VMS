@@ -12,6 +12,8 @@ namespace TCA_VMS.Controllers
         [HttpGet("GetBases")]
         public IActionResult Get_Bases()
         {
+            var x = HttpContext.Session.GetString("ActualUser");
+
             List<Base> lstBases = TCA_VMS_DAO.GetBases();
             if(lstBases == null)
             {

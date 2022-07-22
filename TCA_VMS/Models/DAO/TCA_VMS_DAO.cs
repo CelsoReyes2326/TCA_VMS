@@ -11,6 +11,7 @@ namespace TCA_VMS.Models.DAO
     {
         //FUNCTIONS CREATION
 
+
         #region Base
         public static Result StoreBase(Base _base)
         {
@@ -54,7 +55,7 @@ namespace TCA_VMS.Models.DAO
             {
                 try
                 {
-                    DataTable dt = bl.ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[Get_Bas]");
+                    DataTable dt = bl.ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[Get_Bases]");
                     if (dt.Rows.Count > 0)
                     {
                         lstBases = new List<Base>();
@@ -731,7 +732,6 @@ namespace TCA_VMS.Models.DAO
         }
         #endregion
 
-
         #region IDType
         public static Result StoreIDType(IDType _idType)
         {
@@ -983,7 +983,6 @@ namespace TCA_VMS.Models.DAO
 
 
         #endregion
-
 
         #region VisitorsReport
         public static Result StoreVisitorsReport(VisitorsReport _visitorsReport)

@@ -53,7 +53,6 @@ namespace TCA_VMS.Controllers
             return Ok(result);
         }
 
-
         [HttpPut("UpdateUser")]
         public IActionResult Update_UserType(User user)
         {
@@ -73,10 +72,19 @@ namespace TCA_VMS.Controllers
             }
             else
             {
+                HttpContext.Session.SetString("ActualUser", user.UserName);
+                HttpContext.Session.SetString("ActualUserRole",String.Concat(user.UserType_Id));
+                var x = HttpContext.Session.GetString("ActualUser");
                 return Ok(user);
             }
         }
 
+        [HttpGet("UserLogOut")]
+        public IActionResult LogOut()
+        {
+            HttpContext.Session.Remove("ActualUser");
+            return Ok();
+        }
 
         public static string GetSHA256(string str)
         {
