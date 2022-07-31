@@ -12,28 +12,70 @@ namespace TCA_VMS.Controllers
         [HttpGet("GetVisitorTypes")]
         public IActionResult Get_VisitorTypes()
         {
-            List<VisitorType> lstVisitorTypes = TCA_VMS_DAO.GetVisitorTypes();
-            if(lstVisitorTypes == null)
+            var Usuario = HttpContext.Session.GetString("ActualUser");
+            var Rol = HttpContext.Session.GetString("ActualUserRole");
+            if (Rol == "Administrador")
             {
-                return NotFound();
+                List<VisitorType> lstVisitorTypes = TCA_VMS_DAO.GetVisitorTypes();
+                if (lstVisitorTypes == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    return Ok(lstVisitorTypes);
+                }
             }
             else
             {
-                return Ok(lstVisitorTypes);
+                Result result = new Result();
+                if (Rol == null)
+                {
+                    result.Message = "Es necesario iniciar sesion.";
+                    result.State = 403;
+                    return NotFound(result);
+                }
+                else
+                {
+                    result.Message = "Usuario sin accesso.";
+                    result.State = 403;
+                    return NotFound(result);
+                }
             }
         }
 
         [HttpGet("GetVisitorType/{id}")]
         public IActionResult Get_VisitorType(int id)
         {
-            var _visitorType = TCA_VMS_DAO.GetVisitorType(id);
-            if(_visitorType == null)
+            var Usuario = HttpContext.Session.GetString("ActualUser");
+            var Rol = HttpContext.Session.GetString("ActualUserRole");
+            if (Rol == "Administrador")
             {
-                return NotFound();
+                var _visitorType = TCA_VMS_DAO.GetVisitorType(id);
+                if (_visitorType.VisitorType_Id > 0)
+                {
+                    return Ok(_visitorType);
+                }
+                else
+                {
+                    return NotFound();
+                }
             }
             else
             {
-                return Ok(_visitorType);
+                Result result = new Result();
+                if (Rol == null)
+                {
+                    result.Message = "Es necesario iniciar sesion.";
+                    result.State = 403;
+                    return NotFound(result);
+                }
+                else
+                {
+                    result.Message = "Usuario sin accesso.";
+                    result.State = 403;
+                    return NotFound(result);
+                }
             }
         }
 
@@ -41,16 +83,67 @@ namespace TCA_VMS.Controllers
         [HttpPost("CreateVisitorType")]
         public IActionResult Create_IDType([FromBody] VisitorType _VisitorType)
         {
-            Result result = TCA_VMS_DAO.StoreVisitorType(_VisitorType);
-            return Ok(result);
+            var Usuario = HttpContext.Session.GetString("ActualUser");
+            var Rol = HttpContext.Session.GetString("ActualUserRole");
+            Result result = new Result();
+            if (Rol == "Administrador")
+            {
+                result = TCA_VMS_DAO.StoreVisitorType(_VisitorType);
+                return Ok(result);
+            }
+            else
+            {
+                if (Rol == null)
+                {
+                    result.Message = "Es necesario iniciar sesion.";
+                    result.State = 403;
+                    return NotFound(result);
+                }
+                else
+                {
+                    result.Message = "Usuario sin accesso.";
+                    result.State = 403;
+                    return NotFound(result);
+                }
+            }
         }
 
         [HttpPut("UpdateVisitorType")]
         public IActionResult Update_VisitorType(VisitorType _visitorType)
         {
-            Result result = TCA_VMS_DAO.UpdateVisitorType(_visitorType);
+            var Usuario = HttpContext.Session.GetString("ActualUser");
+            var Rol = HttpContext.Session.GetString("ActualUserRole");
+            Result result = new Result();
+            if (Rol == "Administrador")
+            {
+                if (_visitorType.VisitorType_Name.Length > 0 && _visitorType.VisitorType_Bagde_Color.Length > 0 && _visitorType.VisitorType_Bagde_Number.Length > 0)
+                {
+                    result = TCA_VMS_DAO.UpdateVisitorType(_visitorType);
+                    return Ok(result);
+                }
+                else
+                {
+                    result.Message = "Campos incompletos.";
+                    result.State = 400;
+                    return BadRequest(result);
+                }
 
-            return Ok(result);
+            }
+            else
+            {
+                if (Rol == null)
+                {
+                    result.Message = "Es necesario iniciar sesion.";
+                    result.State = 403;
+                    return NotFound(result);
+                }
+                else
+                {
+                    result.Message = "Usuario sin accesso.";
+                    result.State = 403;
+                    return NotFound(result);
+                }
+            }
         }
     }
 }

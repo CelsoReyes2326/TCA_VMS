@@ -7,6 +7,7 @@
         public int IDType_Id { get; set; }
         public int VisitorType_Id { get; set; }
         public int User_Id { get; set; }
+        public int Base_Id { get; set; }
         public string VisitorsReport_Badge_Number { get; set; }
         public string VisitorsReport_Name { get; set; }
         public string VisitorsReport_LastName { get; set; }
@@ -16,6 +17,7 @@
         public DateTime VisitorsReport_OutHour { get; set; }      //automatico
         public bool VisitorsReport_Status { get; set; } //automatico
         public string VisitorsReport_Photo { get; set; }
+        public bool VisitorsReport_Laptop { get; set; }
         public string VisitorsReport_Laptop_Brand { get; set; }
         public string VisitorsReport_Laptop_Serial_Number { get; set; }
         public string VisitorsReport_RegisteredBy { get; set; }  //automatico

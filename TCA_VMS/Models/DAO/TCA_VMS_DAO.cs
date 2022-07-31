@@ -16,16 +16,18 @@ namespace TCA_VMS.Models.DAO
         public static Result StoreBase(Base _base)
         {
             Result result = new Result();
+            var spOption = 1;
             using (var bl = new Business())
             {
                 try
                 {
 
-                    bl.AddParam("@Base_name", _base.Base_Name)
-                      .AddParam("@Base_location", _base.Base_Name)
+                    bl.AddParam("@Base_Name", _base.Base_Name)
+                      .AddParam("@Base_Location", _base.Base_Location)
+                      .AddParam("@SpOption", spOption)
                       .AddParam("@StatusOut", DBNull.Value, true, 100)
                       .AddParam("@MessageOut", DBNull.Value, true, 300)
-                      .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[Create_Base]");
+                      .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[BaseProcedures]");
 
                     if (bl.Exception != null)
                     {
@@ -50,12 +52,14 @@ namespace TCA_VMS.Models.DAO
 
         public static List<Base> GetBases()
         {
+            var spOption = 3;
             List<Base> lstBases = null;
             using (var bl = new Business())
             {
                 try
                 {
-                    DataTable dt = bl.ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[Get_Bases]");
+                    DataTable dt = bl.AddParam("@SpOption", spOption)
+                        .ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[BaseProcedures]");
                     if (dt.Rows.Count > 0)
                     {
                         lstBases = new List<Base>();
@@ -82,11 +86,12 @@ namespace TCA_VMS.Models.DAO
 
         public static Base GetBase(int id)
         {
+            var spOption = 3;
             Base _base = new Base();
             using (var bl = new Business())
             {
-                DataTable dtHeader = bl.AddParam("@Base_Id", id)
-                                   .ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[Get_Base]");
+                DataTable dtHeader = bl.AddParam("@Base_Id", id).AddParam("@SpOption", spOption)
+                                   .ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[BaseProcedures]");
 
                 if (dtHeader.Rows.Count > 0)
                 {
@@ -103,6 +108,7 @@ namespace TCA_VMS.Models.DAO
         public static Result UpdateBase(Base _base)
         {
             Result result = new Result();
+            var spOption = 4;
             using (var bl = new Business())
             {
                 try
@@ -112,9 +118,10 @@ namespace TCA_VMS.Models.DAO
                       .AddParam("@Base_Name", _base.Base_Name)
                       .AddParam("@Base_Status", _base.Base_Status)
                       .AddParam("@Base_Location", _base.Base_Location)
+                      .AddParam("@SpOption", spOption)
                       .AddParam("@StatusOut", DBNull.Value, true, 100)
                       .AddParam("@MessageOut", DBNull.Value, true, 300)
-                      .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[Update_Base]");
+                      .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[BaseProcedures]");
 
                     if (bl.Exception != null)
                     {
@@ -143,15 +150,17 @@ namespace TCA_VMS.Models.DAO
         public static Result StoreUserType(UserType _userType)
         {
             Result result = new Result();
+            var spOption = 1;
             using (var bl = new Business())
             {
                 try
                 {
 
-                    bl.AddParam("@UserType_Name", _userType.UserType_Name)
+                    bl.AddParam("@SpOption",spOption)
+                      .AddParam("@UserType_Name", _userType.UserType_Name)
                       .AddParam("@StatusOut", DBNull.Value, true, 100)
                       .AddParam("@MessageOut", DBNull.Value, true, 300)
-                      .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[Create_UserType]");
+                      .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[UserTypesProcedures]");
 
                     if (bl.Exception != null)
                     {
@@ -177,11 +186,13 @@ namespace TCA_VMS.Models.DAO
         public static List<UserType> GetUserTypes()
         {
             List<UserType> lstUserTypes = null;
+            var spOption = 3;
             using (var bl = new Business())
             {
                 try
                 {
-                    DataTable dt = bl.ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[Get_UserTypes]");
+                    DataTable dt = bl.AddParam("@SpOption",spOption)
+                        .ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[UserTypesProcedures]");
                     if (dt.Rows.Count > 0)
                     {
                         lstUserTypes = new List<UserType>();
@@ -207,10 +218,12 @@ namespace TCA_VMS.Models.DAO
         public static UserType GetUserType(int id)
         {
             UserType _userType = new UserType();
+            var spOption = 2;
             using (var bl = new Business())
             {
-                DataTable dtHeader = bl.AddParam("@UserType_Id", id)
-                                   .ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[Get_UserType]");
+                DataTable dtHeader = bl.AddParam("@SpOption", spOption)
+                                   .AddParam("@UserType_Id", id)
+                                   .ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[UserTypesProcedures]");
 
                 if (dtHeader.Rows.Count > 0)
                 {
@@ -225,16 +238,18 @@ namespace TCA_VMS.Models.DAO
         public static Result UpdateUserType(UserType _userType)
         {
             Result result = new Result();
+            var spOption = 4;
             using (var bl = new Business())
             {
                 try
                 {
 
-                    bl.AddParam("@UserType_Id", _userType.UserType_Id)
+                    bl.AddParam("@SpOption", spOption)
+                      .AddParam("@UserType_Id", _userType.UserType_Id)
                       .AddParam("@UserType_Name", _userType.UserType_Name)
                       .AddParam("@StatusOut", DBNull.Value, true, 100)
                       .AddParam("@MessageOut", DBNull.Value, true, 300)
-                      .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[Update_UserType]");
+                      .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[UserTypesProcedures]");
 
                     if (bl.Exception != null)
                     {
@@ -263,18 +278,19 @@ namespace TCA_VMS.Models.DAO
         public static Result StoreWorkShift(WorkShift _workShift)
         {
             Result result = new Result();
+            var spOption = 1;
             using (var bl = new Business())
             {
                 try
                 {
 
-                    bl
+                    bl.AddParam("@SpOption",spOption)
                       .AddParam("@WorkShift_Name", _workShift.WorkShift_Name)
                       .AddParam("@WorkShift_Start_Hour", _workShift.WorkShift_Start_Hour)
                       .AddParam("@WorkShift_Out_Hour", _workShift.WorkShift_Out_Hour)
                       .AddParam("@StatusOut", DBNull.Value, true, 100)
                       .AddParam("@MessageOut", DBNull.Value, true, 300)
-                      .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[Create_WorkShift]");
+                      .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[WorkShiftsProcedures]");
 
                     if (bl.Exception != null)
                     {
@@ -300,11 +316,13 @@ namespace TCA_VMS.Models.DAO
         public static List<WorkShift> GetWorkShifts()
         {
             List<WorkShift> lstWorkShifts = null;
+            var spOption = 3;
             using (var bl = new Business())
             {
                 try
                 {
-                    DataTable dt = bl.ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[Get_WorkShifts]");
+                    DataTable dt = bl.AddParam("@SpOption", spOption)
+                        .ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[WorkShiftsProcedures]");
                     if (dt.Rows.Count > 0)
                     {
                         lstWorkShifts = new List<WorkShift>();
@@ -332,10 +350,12 @@ namespace TCA_VMS.Models.DAO
         public static WorkShift GetWorkShift(int id)
         {
             WorkShift _workShift = new WorkShift();
+            var spOption = 2;
             using (var bl = new Business())
             {
-                DataTable dtHeader = bl.AddParam("@WorkShift_Id", id)
-                                   .ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[Get_WorkShift]");
+                DataTable dtHeader = bl.AddParam("@SpOption", spOption)
+                    .AddParam("@WorkShift_Id", id)
+                                   .ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[WorkShiftsProcedures]");
 
                 if (dtHeader.Rows.Count > 0)
                 {
@@ -352,18 +372,20 @@ namespace TCA_VMS.Models.DAO
         public static Result UpdateWorkShift(WorkShift _workShift)
         {
             Result result = new Result();
+            var spOption = 4;
             using (var bl = new Business())
             {
                 try
                 {
 
-                    bl.AddParam("@WorkShift_Id", _workShift.WorkShift_Id)
+                    bl.AddParam("@SpOption", spOption)
+                      .AddParam("@WorkShift_Id", _workShift.WorkShift_Id)
                       .AddParam("@WorkShift_Name", _workShift.WorkShift_Name)
                       .AddParam("@WorkShift_Start_Hour", _workShift.WorkShift_Start_Hour)
                       .AddParam("@WorkShift_Out_Hour", _workShift.WorkShift_Out_Hour)
                       .AddParam("@StatusOut", DBNull.Value, true, 100)
                       .AddParam("@MessageOut", DBNull.Value, true, 300)
-                      .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[Update_WorkShift]");
+                      .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[WorkShiftsProcedures]");
 
                     if (bl.Exception != null)
                     {
@@ -392,12 +414,13 @@ namespace TCA_VMS.Models.DAO
         {
             _user.User_Password = GetSHA256(_user.User_Password);
             Result result = new Result();
+            var spOption = 1;
             using (var bl = new Business())
             {
                 try
                 {
 
-                    bl
+                    bl.AddParam("@SpOption", spOption)
                       .AddParam("@Base_Id", _user.Base_Id)
                       .AddParam("@UserType_Id", _user.UserType_Id)
                       .AddParam("@WorkShift_Id", _user.WorkShift_Id)
@@ -408,7 +431,7 @@ namespace TCA_VMS.Models.DAO
                       .AddParam("@User_Status", _user.User_Status)
                       .AddParam("@StatusOut", DBNull.Value, true, 100)
                       .AddParam("@MessageOut", DBNull.Value, true, 300)
-                      .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[Create_User]");
+                      .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[UsersProcedures]");
 
                     if (bl.Exception != null)
                     {
@@ -435,12 +458,13 @@ namespace TCA_VMS.Models.DAO
         {
             _user.User_Password = GetSHA256(_user.User_Password);
             Result result = new Result();
+            var spOption = 2;
             using (var bl = new Business())
             {
                 try
                 {
 
-                    bl
+                    bl.AddParam("@SpOption",spOption)
                       .AddParam("@Base_Id", _user.Base_Id)
                       .AddParam("@UserType_Id", _user.UserType_Id)
                       .AddParam("@WorkShift_Id", _user.WorkShift_Id)
@@ -452,7 +476,7 @@ namespace TCA_VMS.Models.DAO
                       .AddParam("@User_Status", _user.User_Status)
                       .AddParam("@StatusOut", DBNull.Value, true, 100)
                       .AddParam("@MessageOut", DBNull.Value, true, 300)
-                      .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[Create_UserSA]");
+                      .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[UsersProcedures]");
 
                     if (bl.Exception != null)
                     {
@@ -478,11 +502,13 @@ namespace TCA_VMS.Models.DAO
         public static List<User> GetUsers()
         {
             List<User> lstUsers = null;
+            var spOption = 3;
             using (var bl = new Business())
             {
                 try
                 {
-                    DataTable dt = bl.ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[Get_Users]");
+                    DataTable dt = bl.AddParam("@SpOption",spOption)
+                        .ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[UsersProcedures]");
                     if (dt.Rows.Count > 0)
                     {
                         lstUsers = new List<User>();
@@ -513,10 +539,13 @@ namespace TCA_VMS.Models.DAO
         public static User GetUser(int id)
         {
             User _user = new User();
+            var spOption = 4;
             using (var bl = new Business())
             {
-                DataTable dtHeader = bl.AddParam("@User_Id", id)
-                                   .ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[Get_User]");
+                DataTable dtHeader = bl
+                                   .AddParam("@SpOption",spOption)
+                                   .AddParam("@User_Id", id)
+                                   .ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[UsersProcedures]");
 
                 if (dtHeader.Rows.Count > 0)
                 {
@@ -539,12 +568,13 @@ namespace TCA_VMS.Models.DAO
         public static Result UpdateUser(User _user)
         {
             Result result = new Result();
+            var spOption = 5;
             using (var bl = new Business())
             {
                 try
                 {
 
-                    bl
+                    bl.AddParam("@SpOption", spOption)
                       .AddParam("@User_Id", _user.User_Id)
                       .AddParam("@Base_Id", _user.Base_Id)
                       .AddParam("@UserType_Id", _user.UserType_Id)
@@ -557,7 +587,7 @@ namespace TCA_VMS.Models.DAO
                       .AddParam("@User_Status", _user.User_Status)
                       .AddParam("@StatusOut", DBNull.Value, true, 100)
                       .AddParam("@MessageOut", DBNull.Value, true, 300)
-                      .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[Update_User]");
+                      .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[UsersProcedures]");
 
                     if (bl.Exception != null)
                     {
@@ -593,7 +623,8 @@ namespace TCA_VMS.Models.DAO
                 {
                     _user.User_Id = Convert.ToInt32(dtHeader.Rows[0]["User_Id"]);
                     _user.UserType_Id = Convert.ToInt32(dtHeader.Rows[0]["UserType_Id"]);
-                    _user.UserName = dtHeader.Rows[0]["UserName"].ToString();
+                    _user.UserName = dtHeader.Rows[0]["User_Name"].ToString();
+                    _user.UserType_Name = dtHeader.Rows[0]["UserType_Name"].ToString();
                 }
             }
             return _user;
@@ -607,7 +638,8 @@ namespace TCA_VMS.Models.DAO
         public static Result StoreCompany(Company _company)
         {
             Result result = new Result();
-            using(var bl = new Business())
+            var spOption = 1;
+            using (var bl = new Business())
             {
                 try
                 {
@@ -615,9 +647,10 @@ namespace TCA_VMS.Models.DAO
                       .AddParam("@Company_Name", _company.Company_Name)
                       .AddParam("@Company_Address", _company.Company_Address)
                       .AddParam("@Company_Phone_Number", _company.Company_Phone_Number)
+                      .AddParam("@SpOption", spOption)
                       .AddParam("@StatusOut", DBNull.Value, true, 100)
                       .AddParam("@MessageOut", DBNull.Value, true, 300)
-                      .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[Create_Company]");
+                      .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[CompanyProcedures]");
 
                     if (bl.Exception != null)
                     {
@@ -643,11 +676,14 @@ namespace TCA_VMS.Models.DAO
         public static List<Company> GetCompanies()
         {
             List<Company> lstCompanies = null;
+            var spOption = 3;
             using (var bl = new Business())
             {
                 try
                 {
-                    DataTable dt = bl.ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[Get_Companies]");
+                    DataTable dt = bl
+                        .AddParam("@SpOption", spOption)
+                        .ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[CompanyProcedures]");
                     if (dt.Rows.Count > 0)
                     {
                         lstCompanies = new List<Company>();
@@ -667,7 +703,7 @@ namespace TCA_VMS.Models.DAO
                 }
                 catch (Exception ex)
                 {
-                    //MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
                 }
             }
             return lstCompanies;
@@ -676,10 +712,13 @@ namespace TCA_VMS.Models.DAO
         public static Company GetCompany(int id)
         {
             Company _company = new Company();
+            var spOption = 2;
             using (var bl = new Business())
             {
-                DataTable dtHeader = bl.AddParam("@Company_Id", id)
-                                   .ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[Get_Company]");
+                DataTable dtHeader = bl
+                                   .AddParam("@SpOption",spOption)
+                                   .AddParam("@Company_Id", id)
+                                   .ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[CompanyProcedures]");
 
                 if (dtHeader.Rows.Count > 0)
                 {
@@ -697,19 +736,21 @@ namespace TCA_VMS.Models.DAO
         public static Result UpdateCompany(Company _company)
         {
             Result result = new Result();
+            var spOption = 4;
             using (var bl = new Business())
             {
                 try
                 {
 
-                    bl.AddParam("@Company_Id", _company.Company_Id)
+                    bl.AddParam("@SpOption",spOption)
+                      .AddParam("@Company_Id", _company.Company_Id)
                       .AddParam("@Company_Name", _company.Company_Name)
                       .AddParam("@Company_Address", _company.Company_Address)
                       .AddParam("@Company_Phone_Number", _company.Company_Phone_Number)
                       .AddParam("@Company_Status", _company.Company_Status)
                       .AddParam("@StatusOut", DBNull.Value, true, 100)
                       .AddParam("@MessageOut", DBNull.Value, true, 300)
-                      .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[Update_Company]");
+                      .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[CompanyProcedures]");
 
                     if (bl.Exception != null)
                     {
@@ -736,15 +777,18 @@ namespace TCA_VMS.Models.DAO
         public static Result StoreIDType(IDType _idType)
         {
             Result result = new Result();
+            var SpOption = 1;
             using (var bl = new Business())
             {
                 try
                 {
 
-                    bl.AddParam("@IDType_Name", _idType.IDType_Name)
+                    bl
+                      .AddParam("@SpOption", SpOption)
+                      .AddParam("@IDType_Name", _idType.IDType_Name)
                       .AddParam("@StatusOut", DBNull.Value, true, 100)
                       .AddParam("@MessageOut", DBNull.Value, true, 300)
-                      .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[Create_IDType]");
+                      .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[IDTypesProcedures]");
 
                     if (bl.Exception != null)
                     {
@@ -770,11 +814,14 @@ namespace TCA_VMS.Models.DAO
         public static List<IDType> GetIDTypes()
         {
             List<IDType> lstIDTypes = null;
+            var SpOption = 3;
             using (var bl = new Business())
             {
                 try
                 {
-                    DataTable dt = bl.ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[Get_IDTypes]");
+                    DataTable dt = bl
+                        .AddParam("@SpOption", SpOption)
+                        .ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[IDTypesProcedures]");
                     if (dt.Rows.Count > 0)
                     {
                         lstIDTypes = new List<IDType>();
@@ -799,10 +846,13 @@ namespace TCA_VMS.Models.DAO
         public static IDType GetIDType(int id)
         {
             IDType _IDType = new IDType();
+            var SpOption = 2;
             using (var bl = new Business())
             {
-                DataTable dtHeader = bl.AddParam("@IDType_Id", id)
-                                   .ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[Get_IDType]");
+                DataTable dtHeader = bl
+                                   .AddParam("@SpOption", SpOption)
+                                   .AddParam("@IDType_Id", id)
+                                   .ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[IDTypesProcedures]");
 
                 if (dtHeader.Rows.Count > 0)
                 {
@@ -816,16 +866,18 @@ namespace TCA_VMS.Models.DAO
         public static Result UpdateIDType(IDType _IDType)
         {
             Result result = new Result();
+            var SpOption = 4;
             using (var bl = new Business())
             {
                 try
                 {
 
-                    bl.AddParam("@IDType_Id", _IDType.IDType_Id)
+                    bl.AddParam("@SpOption", SpOption)
+                      .AddParam("@IDType_Id", _IDType.IDType_Id)
                       .AddParam("@IDType_Name", _IDType.IDType_Name)
                       .AddParam("@StatusOut", DBNull.Value, true, 100)
                       .AddParam("@MessageOut", DBNull.Value, true, 300)
-                      .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[Update_IDType]");
+                      .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[IDTypesProcedures]");
 
                     if (bl.Exception != null)
                     {
@@ -854,19 +906,20 @@ namespace TCA_VMS.Models.DAO
         public static Result StoreVisitorType(VisitorType _visitorType)
         {
             Result result = new Result();
+            var spOption = 1;
             using (var bl = new Business())
             {
                 try
                 {
 
-                    bl
+                    bl.AddParam("@SpOption", spOption)
                       .AddParam("@VisitorType_Name", _visitorType.VisitorType_Name)
                       .AddParam("@VisitorType_Bagde_Color", _visitorType.VisitorType_Bagde_Color)
                       .AddParam("@VisitorType_Badge_Number", _visitorType.VisitorType_Bagde_Number)
                       .AddParam("@Base_Id", _visitorType.Base_Id)
                       .AddParam("@StatusOut", DBNull.Value, true, 100)
                       .AddParam("@MessageOut", DBNull.Value, true, 300)
-                      .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[Create_VisitorType]");
+                      .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[VisitorTypesProcedures]");
 
                     if (bl.Exception != null)
                     {
@@ -892,11 +945,13 @@ namespace TCA_VMS.Models.DAO
         public static List<VisitorType> GetVisitorTypes()
         {
             List<VisitorType> lstVisitorTypes = null;
+            var spOption = 3;
             using (var bl = new Business())
             {
                 try
                 {
-                    DataTable dt = bl.ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[Get_VisitorTypes]");
+                    DataTable dt = bl.AddParam("@SpOption", spOption)
+                        .ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[VisitorTypesProcedures]");
                     if (dt.Rows.Count > 0)
                     {
                         lstVisitorTypes = new List<VisitorType>();
@@ -926,10 +981,12 @@ namespace TCA_VMS.Models.DAO
         public static VisitorType GetVisitorType(int id)
         {
             VisitorType _visitorType = new VisitorType();
+            var spOption = 2;
             using (var bl = new Business())
             {
-                DataTable dtHeader = bl.AddParam("@VisitorType_Id", id)
-                                   .ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[Get_VisitorType]");
+                DataTable dtHeader = bl.AddParam("@SpOption", spOption)
+                                   .AddParam("@VisitorType_Id", id)
+                                   .ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[VisitorTypesProcedures]");
 
                 if (dtHeader.Rows.Count > 0)
                 {
@@ -947,19 +1004,20 @@ namespace TCA_VMS.Models.DAO
         public static Result UpdateVisitorType(VisitorType _visitorType)
         {
             Result result = new Result();
+            var spOption = 4;
             using (var bl = new Business())
             {
                 try
                 {
-
-                    bl.AddParam("@VisitorType_Id", _visitorType.VisitorType_Id)
+                    bl.AddParam("@SpOption", spOption)
+                      .AddParam("@VisitorType_Id", _visitorType.VisitorType_Id)
                       .AddParam("@Base_Id", _visitorType.Base_Id)
                       .AddParam("@VisitorType_Name", _visitorType.VisitorType_Name)
                       .AddParam("@VisitorType_Badge_Number", _visitorType.VisitorType_Bagde_Number)
-                      .AddParam("@VisitorType_Badge_Color", _visitorType.VisitorType_Bagde_Color)
+                      .AddParam("@VisitorType_Bagde_Color", _visitorType.VisitorType_Bagde_Color)
                       .AddParam("@StatusOut", DBNull.Value, true, 100)
                       .AddParam("@MessageOut", DBNull.Value, true, 300)
-                      .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[Update_VisitorType]");
+                      .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[VisitorTypesProcedures]");
 
                     if (bl.Exception != null)
                     {
@@ -988,26 +1046,28 @@ namespace TCA_VMS.Models.DAO
         public static Result StoreVisitorsReport(VisitorsReport _visitorsReport)
         {
             Result result = new Result();
+            var spOption = 1;
             using (var bl = new Business())
             {
                 try
                 {
 
-                    bl
-                      .AddParam("@VisitorsReport_Name", _visitorsReport.VisitorsReport_Name)
-                      .AddParam("@VisitorsReport_LastName", _visitorsReport.VisitorsReport_LastName)
-                      .AddParam("@VisitorsReport_Subject", _visitorsReport.VisitorsReport_Subject)
-                      .AddParam("@VisitorsReport_RecievedBy", _visitorsReport.VisitorsReport_RecievedBy)
-                      .AddParam("@VisitorsReport_Photo", _visitorsReport.VisitorsReport_Photo)
+                    bl.AddParam("@SpOption",spOption)
+                      .AddParam("@VisitorsReport_Name", _visitorsReport.VisitorsReport_Name)//
+                      .AddParam("@VisitorsReport_LastName", _visitorsReport.VisitorsReport_LastName)//
+                      .AddParam("@VisitorsReport_Subject", _visitorsReport.VisitorsReport_Subject)//
+                      .AddParam("@VisitorsReport_RecievedBy", _visitorsReport.VisitorsReport_RecievedBy)//
+                      .AddParam("@VisitorsReport_Photo", _visitorsReport.VisitorsReport_Photo)//
+                      .AddParam("@VisitorsReport_Laptop", _visitorsReport.VisitorsReport_Laptop)//
                       .AddParam("@VisitorsReport_Laptop_Brand", _visitorsReport.VisitorsReport_Laptop_Brand)
                       .AddParam("@VisitorsReport_Laptop_Serial_Number", _visitorsReport.VisitorsReport_Laptop_Serial_Number)
-                      .AddParam("@Company_Id", _visitorsReport.Company_Id)
-                      .AddParam("@IDType_Id", _visitorsReport.IDType_Id)
-                      .AddParam("@VisitorType_Id", _visitorsReport.VisitorType_Id)
-                      .AddParam("@User_Id", _visitorsReport.User_Id)
+                      .AddParam("@Company_Id", _visitorsReport.Company_Id)//
+                      .AddParam("@IDType_Id", _visitorsReport.IDType_Id)//
+                      .AddParam("@VisitorType_Id", _visitorsReport.VisitorType_Id)//
+                      .AddParam("@User_Id", _visitorsReport.User_Id)//
                       .AddParam("@StatusOut", DBNull.Value, true, 100)
                       .AddParam("@MessageOut", DBNull.Value, true, 300)
-                      .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[Create_VisitorsReport]");
+                      .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[VisitorsReportProcedures]");
 
                     if (bl.Exception != null)
                     {
@@ -1034,11 +1094,13 @@ namespace TCA_VMS.Models.DAO
         public static List<VisitorsReport> GetVisitorsReports()
         {
             List<VisitorsReport> lstVisitorsReport = null;
+            var spOption = 3;
             using (var bl = new Business())
             {
                 try
                 {
-                    DataTable dt = bl.ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[GetVisitorsReports]");
+                    DataTable dt = bl.AddParam("@SpOption",spOption)
+                        .ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[VisitorsReportProcedures]");
                     if (dt.Rows.Count > 0)
                     {
                         lstVisitorsReport = new List<VisitorsReport>();
@@ -1047,6 +1109,11 @@ namespace TCA_VMS.Models.DAO
                             lstVisitorsReport.Add(new VisitorsReport()
                             {
                                 VisitorsReport_Id = Convert.ToInt32(item["VisitorsReport_Id"]),
+                                Company_Id = Convert.ToInt32(item["Company_Id"]),
+                                IDType_Id = Convert.ToInt32(item["IDType_Id"]),
+                                VisitorType_Id = Convert.ToInt32(item["VisitorType_Id"]),
+                                User_Id = Convert.ToInt32(item["User_Id"]),
+                                Base_Id = Convert.ToInt32(item["Base_Id"]),
                                 Company_Name = item["Company_Name"].ToString(),
                                 IDType_Name = item["IDType_Name"].ToString(),
                                 VisitorType_Name = item["VisitorType_Name"].ToString(),
@@ -1078,14 +1145,21 @@ namespace TCA_VMS.Models.DAO
         public static VisitorsReport GetVisitorsReport(int id)
         {
             VisitorsReport _visitorsReport = new VisitorsReport();
+            var spOption = 2;
             using (var bl = new Business())
             {
-                DataTable dtHeader = bl.AddParam("@VisitorsReport_Id", id)
-                                   .ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[GetVisitorsReport]");
+                DataTable dtHeader = bl.AddParam("SpOption", spOption)
+                                   .AddParam("@VisitorsReport_Id", id)
+                                   .ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[VisitorsReportProcedures]");
 
                 if (dtHeader.Rows.Count > 0)
                 {
                     _visitorsReport.VisitorsReport_Id = Convert.ToInt32(dtHeader.Rows[0]["VisitorsReport_Id"]);
+                    _visitorsReport.Company_Id = Convert.ToInt32(dtHeader.Rows[0]["Company_Id"]);
+                    _visitorsReport.Base_Id = Convert.ToInt32(dtHeader.Rows[0]["Base_Id"]);
+                    _visitorsReport.IDType_Id = Convert.ToInt32(dtHeader.Rows[0]["IDType_Id"]);
+                    _visitorsReport.User_Id = Convert.ToInt32(dtHeader.Rows[0]["User_Id"]);
+                    _visitorsReport.VisitorType_Id = Convert.ToInt32(dtHeader.Rows[0]["VisitorType_Id"]);
                     _visitorsReport.Company_Name = dtHeader.Rows[0]["Company_Name"].ToString();
                     _visitorsReport.IDType_Name = dtHeader.Rows[0]["IDType_Name"].ToString();
                     _visitorsReport.VisitorType_Name = dtHeader.Rows[0]["VisitorType_Name"].ToString();
@@ -1109,15 +1183,18 @@ namespace TCA_VMS.Models.DAO
         public static Result UpdateVisitorsReport_Status(int id)
         {
             Result result = new Result();
+            var spOption = 4;
             using (var bl = new Business())
             {
                 try
                 {
 
-                    bl.AddParam("@VisitorsReport_Id", id)
+                    bl
+                      .AddParam("@SpOption",spOption)
+                      .AddParam("@VisitorsReport_Id", id)
                       .AddParam("@StatusOut", DBNull.Value, true, 100)
                       .AddParam("@MessageOut", DBNull.Value, true, 300)
-                      .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[Update_VisitorsReportStatus]");
+                      .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[VisitorsReportProcedures]");
 
                     if (bl.Exception != null)
                     {
