@@ -14,167 +14,90 @@ namespace TCA_VMS.Controllers
         [HttpGet("GetUsers")]
         public IActionResult Get_Users()
         {
-            var Usuario = HttpContext.Session.GetString("ActualUser");
-            var Rol = HttpContext.Session.GetString("ActualUserRole");
-
-            if (Rol == "Administrador")
+            List<User> lstUsers = TCA_VMS_DAO.GetUsers();
+            if (lstUsers == null)
             {
-                List<User> lstUsers = TCA_VMS_DAO.GetUsers();
-                if (lstUsers == null)
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    return Ok(lstUsers);
-                }
+                return NotFound();
             }
             else
             {
-                Result result = new Result();
-
-                if (Rol == null)
-                {
-                    result.Message = "Es necesario iniciar sesion.";
-                    result.State = 403;
-                    return NotFound(result);
-                }
-                else
-                {
-                    result.Message = "Usuario sin accesso.";
-                    result.State = 403;
-                    return NotFound(result);
-                }
+                return Ok(lstUsers);
             }
         }
 
         [HttpGet("GetUser/{id}")]
         public IActionResult Get_User(int id)
         {
-            var Usuario = HttpContext.Session.GetString("ActualUser");
-            var Rol = HttpContext.Session.GetString("ActualUserRole");
-            if (Rol == "Administrador")
+            var _user = TCA_VMS_DAO.GetUser(id);
+            if (_user == null)
             {
-                var _user = TCA_VMS_DAO.GetUser(id);
-                if (_user == null)
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    return Ok(_user);
-                }
+                return NotFound();
             }
             else
             {
-                Result result = new Result();
-                if (Rol == null)
-                {
-                    result.Message = "Es necesario iniciar sesion.";
-                    result.State = 403;
-                    return Ok(result);
-                }
-                else
-                {
-                    result.Message = "Usuario sin accesso.";
-                    result.State = 403;
-                    return Ok(result);
-                }
+                return Ok(_user);
             }
+
         }
 
         [HttpPost("CreateUser")]
         public IActionResult Create_User([FromBody] User user)
         {
-            var Usuario = HttpContext.Session.GetString("ActualUser");
-            var Rol = HttpContext.Session.GetString("ActualUserRole");
             Result result = new Result();
-            if (Rol == "Administrador")
-            {
-                if (user.Base_Id != 0 && user.UserType_Id != 0 && user.WorkShift_Id != 0)
-                {
-                    result = TCA_VMS_DAO.StoreUser(user);
-                    return Ok(result);
-                }
-                else
-                {
-                    result.State = 403;
-                    result.Message = "Verifique los datos, modelo no valido.";
-                    return Ok(result);
-                }
 
+            if (user.Base_Id > 0 && user.UserType_Id > 0 && user.WorkShift_Id > 0 && user.User_Name.Length > 0
+                && user.UserName.Length > 0 && user.User_Last_Name.Length > 0 && user.User_Email.Length > 0
+                && user.User_Password.Length > 0)
+            {
+                result = TCA_VMS_DAO.StoreUser(user);
+                return Ok(result);
             }
             else
             {
-                if (Rol == null)
-                {
-                    result.Message = "Es necesario iniciar sesion.";
-                    result.State = 403;
-                    return NotFound(result);
-                }
-                else
-                {
-                    result.Message = "Usuario sin accesso.";
-                    result.State = 403;
-                    return NotFound(result);
-                }
+                result.State = 403;
+                result.Message = "Verifique los datos, modelo no valido.";
+                return Ok(result);
             }
         }
 
         [HttpPost("CreateUserSA")]
         public IActionResult Create_UserSA([FromBody] User user)
         {
-            var Usuario = HttpContext.Session.GetString("ActualUser");
-            var Rol = HttpContext.Session.GetString("ActualUserRole");
             Result result = new Result();
-            if (Rol == "Administrador")
+            if (user.Base_Id > 0 && user.UserType_Id > 0 && user.WorkShift_Id > 0 && user.User_Name.Length > 0 
+                && user.UserName.Length > 0 && user.User_Last_Name.Length > 0 && user.User_Email.Length > 0 
+                && user.User_Password.Length > 0)
             {
                 result = TCA_VMS_DAO.StoreUserSA(user);
                 return Ok(result);
             }
             else
             {
-                if (Rol == null)
-                {
-                    result.Message = "Es necesario iniciar sesion.";
-                    result.State = 403;
-                    return NotFound(result);
-                }
-                else
-                {
-                    result.Message = "Usuario sin accesso.";
-                    result.State = 403;
-                    return NotFound(result);
-                }
+                result.State = 400;
+                result.Message = "Verifique los datos";
+                return BadRequest(result);
             }
         }
 
         [HttpPut("UpdateUser")]
         public IActionResult Update_UserType(User user)
         {
-            var Usuario = HttpContext.Session.GetString("ActualUser");
-            var Rol = HttpContext.Session.GetString("ActualUserRole");
+
             Result result = new Result();
-            if (Rol == "Administrador")
+            if (user.Base_Id > 0 && user.UserType_Id > 0 && user.WorkShift_Id > 0 && user.User_Name.Length > 0
+                && user.UserName.Length > 0 && user.User_Last_Name.Length > 0 && user.User_Email.Length > 0
+                && user.User_Password.Length > 0 && user.User_Status || user.User_Status == false)
             {
                 result = TCA_VMS_DAO.UpdateUser(user);
                 return Ok(result);
             }
             else
             {
-                if (Rol == null)
-                {
-                    result.Message = "Es necesario iniciar sesion.";
-                    result.State = 403;
-                    return NotFound(result);
-                }
-                else
-                {
-                    result.Message = "Usuario sin accesso.";
-                    result.State = 403;
-                    return NotFound(result);
-                }
+                result.State = 400;
+                result.Message = "Verifique los datos";
+                return BadRequest(result);
             }
+           
         }
 
         [HttpGet("GetUserLogin/{username}/{password}")]
@@ -191,8 +114,6 @@ namespace TCA_VMS.Controllers
             }
             else
             {
-                HttpContext.Session.SetString("ActualUser", user.UserName);
-                HttpContext.Session.SetString("ActualUserRole", String.Concat(user.UserType_Name));
                 return Ok(user);
             }
         }
@@ -200,8 +121,6 @@ namespace TCA_VMS.Controllers
         [HttpGet("UserLogOut")]
         public IActionResult LogOut()
         {
-            HttpContext.Session.Remove("ActualUser");
-            HttpContext.Session.Remove("ActualUserRole");
             return Ok();
         }
 

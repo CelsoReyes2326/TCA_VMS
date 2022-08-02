@@ -428,7 +428,6 @@ namespace TCA_VMS.Models.DAO
                       .AddParam("@UserName", _user.UserName)
                       .AddParam("@User_Last_Name", _user.User_Last_Name)
                       .AddParam("@User_Password", _user.User_Password)
-                      .AddParam("@User_Status", _user.User_Status)
                       .AddParam("@StatusOut", DBNull.Value, true, 100)
                       .AddParam("@MessageOut", DBNull.Value, true, 300)
                       .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[UsersProcedures]");
@@ -473,7 +472,6 @@ namespace TCA_VMS.Models.DAO
                       .AddParam("@User_Last_Name", _user.User_Last_Name)
                       .AddParam("@User_Email", _user.User_Email)
                       .AddParam("@User_Password", _user.User_Password)
-                      .AddParam("@User_Status", _user.User_Status)
                       .AddParam("@StatusOut", DBNull.Value, true, 100)
                       .AddParam("@MessageOut", DBNull.Value, true, 300)
                       .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[UsersProcedures]");
