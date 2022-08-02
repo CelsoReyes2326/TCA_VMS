@@ -55,7 +55,6 @@ namespace TCA_VMS.Controllers
                 result.State = 400;
                 return BadRequest(result);
             }
-
         }
 
         [HttpPut("UpdateCompany")]
