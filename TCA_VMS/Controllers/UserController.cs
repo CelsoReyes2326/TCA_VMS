@@ -100,11 +100,11 @@ namespace TCA_VMS.Controllers
            
         }
 
-        [HttpGet("GetUserLogin/{username}/{password}")]
-        public IActionResult Login(string username, string password)
+        [HttpPost("PostUserLogin")]
+        public IActionResult Login(User us)
         {
-            var _password = GetSHA256(password);
-            var user = TCA_VMS_DAO.GetUserLogin(username, _password);
+            var _password = GetSHA256(us.User_Password);
+            var user = TCA_VMS_DAO.GetUserLogin(us.UserName, _password);
             if (user == null || user.User_Id == 0)
             {
                 Result result = new Result();
@@ -114,6 +114,8 @@ namespace TCA_VMS.Controllers
             }
             else
             {
+                var token = GetSHA256(user.UserName);
+                user.User_Token = token;
                 return Ok(user);
             }
         }

@@ -86,7 +86,7 @@ namespace TCA_VMS.Models.DAO
 
         public static Base GetBase(int id)
         {
-            var spOption = 3;
+            var spOption = 2;
             Base _base = new Base();
             using (var bl = new Business())
             {

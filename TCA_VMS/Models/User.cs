@@ -13,7 +13,7 @@
         public string  User_Password { get; set; }
         public bool User_Status { get; set; }
         public DateTime User_Creation_Date { get; set; }
-
+        public string  User_Token { get; set; }
         public string Base_Name { get; set; }
         public string UserType_Name { get; set; }
         public string WorkShift_Name { get; set; }
