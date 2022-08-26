@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using System.Text;
 using TCA_VMS.Models;
 using TCA_VMS.Models.DAO;
+using static TCA_VMS.Models.User;
 
 namespace TCA_VMS.Controllers
 {
@@ -101,15 +102,24 @@ namespace TCA_VMS.Controllers
         }
 
         [HttpPost("PostUserLogin")]
-        public IActionResult Login(User us)
+        public IActionResult Login(UserLogin us)
         {
             var _password = GetSHA256(us.User_Password);
             var user = TCA_VMS_DAO.GetUserLogin(us.UserName, _password);
+            Result result = new Result();
             if (user == null || user.User_Id == 0)
             {
-                Result result = new Result();
+                
                 result.State = 404;
                 result.Message = "Usuario no encontrado.";
+                result.Identificador = 1;
+                return NotFound(result);
+            }
+            else if(user.User_Status == false)
+            {
+                result.State = 404;
+                result.Message = "Usuario deshabilitado, favor de contactar el administrador";
+                result.Identificador = 2;
                 return NotFound(result);
             }
             else

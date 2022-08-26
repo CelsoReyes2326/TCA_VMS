@@ -623,6 +623,7 @@ namespace TCA_VMS.Models.DAO
                     _user.UserType_Id = Convert.ToInt32(dtHeader.Rows[0]["UserType_Id"]);
                     _user.UserName = dtHeader.Rows[0]["User_Name"].ToString();
                     _user.UserType_Name = dtHeader.Rows[0]["UserType_Name"].ToString();
+                    _user.User_Status = Convert.ToBoolean(dtHeader.Rows[0]["User_Status"]);
                 }
             }
             return _user;

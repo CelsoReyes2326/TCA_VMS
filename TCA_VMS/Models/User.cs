@@ -17,5 +17,11 @@
         public string Base_Name { get; set; }
         public string UserType_Name { get; set; }
         public string WorkShift_Name { get; set; }
+
+        public class UserLogin
+        {
+            public string UserName { get; set; }
+            public string User_Password { get; set; }
+        }
     }
 }
