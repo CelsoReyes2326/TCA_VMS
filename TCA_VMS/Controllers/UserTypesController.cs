@@ -9,10 +9,10 @@ namespace TCA_VMS.Controllers
     [ApiController]
     public class UserTypesController : ControllerBase
     {
-        [HttpGet("GetUserTypes")]
-        public IActionResult Get_UserTypes()
+        [HttpGet("GetUserTypes/")]
+        public IActionResult Get_UserTypes(string userTypeName)
         {
-            List<UserType> lstUserTypes = TCA_VMS_DAO.GetUserTypes();
+            List<UserType> lstUserTypes = TCA_VMS_DAO.GetUserTypes(userTypeName);
             if (lstUserTypes == null)
             {
                 return NotFound();

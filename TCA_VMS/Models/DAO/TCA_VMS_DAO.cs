@@ -183,7 +183,7 @@ namespace TCA_VMS.Models.DAO
             return result;
         }
 
-        public static List<UserType> GetUserTypes()
+        public static List<UserType> GetUserTypes(string userTypeName)
         {
             List<UserType> lstUserTypes = null;
             var spOption = 3;
@@ -192,6 +192,7 @@ namespace TCA_VMS.Models.DAO
                 try
                 {
                     DataTable dt = bl.AddParam("@SpOption",spOption)
+                        .AddParam("@userTypeName", userTypeName)
                         .ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[UserTypesProcedures]");
                     if (dt.Rows.Count > 0)
                     {
@@ -420,14 +421,14 @@ namespace TCA_VMS.Models.DAO
                 try
                 {
 
-                    bl.AddParam("@SpOption", spOption)
-                      .AddParam("@Base_Id", _user.Base_Id)
-                      .AddParam("@UserType_Id", _user.UserType_Id)
-                      .AddParam("@WorkShift_Id", _user.WorkShift_Id)
-                      .AddParam("@User_Name", _user.User_Name)
-                      .AddParam("@UserName", _user.UserName)
-                      .AddParam("@User_Last_Name", _user.User_Last_Name)
-                      .AddParam("@User_Password", _user.User_Password)
+                        bl.AddParam("@SpOption", spOption)
+                          .AddParam("@Base_Id", _user.Base_Id)
+                          .AddParam("@UserType_Id", _user.UserType_Id)
+                          .AddParam("@WorkShift_Id", _user.WorkShift_Id)
+                          .AddParam("@User_Name", _user.User_Name)
+                          .AddParam("@UserName", _user.UserName)
+                          .AddParam("@User_Last_Name", _user.User_Last_Name)
+                          .AddParam("@User_Password", _user.User_Password)
                       .AddParam("@StatusOut", DBNull.Value, true, 100)
                       .AddParam("@MessageOut", DBNull.Value, true, 300)
                       .ProcedureQuery(Business.DBConn.ServidorLocal, "[Visit].[UsersProcedures]");
@@ -493,11 +494,10 @@ namespace TCA_VMS.Models.DAO
                     result.Message = ex.Message;
                 }
             }
-
             return result;
         }
 
-        public static List<User> GetUsers()
+        public static List<User> GetUsers(string userTypeName)
         {
             List<User> lstUsers = null;
             var spOption = 3;
@@ -506,6 +506,7 @@ namespace TCA_VMS.Models.DAO
                 try
                 {
                     DataTable dt = bl.AddParam("@SpOption",spOption)
+                        .AddParam("@userTypeName",userTypeName)
                         .ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[UsersProcedures]");
                     if (dt.Rows.Count > 0)
                     {

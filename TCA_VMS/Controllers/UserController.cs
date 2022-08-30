@@ -13,9 +13,9 @@ namespace TCA_VMS.Controllers
     {
 
         [HttpGet("GetUsers")]
-        public IActionResult Get_Users()
+        public IActionResult Get_Users(string userTypeName)
         {
-            List<User> lstUsers = TCA_VMS_DAO.GetUsers();
+            List<User> lstUsers = TCA_VMS_DAO.GetUsers(userTypeName);
             if (lstUsers == null)
             {
                 return NotFound();
