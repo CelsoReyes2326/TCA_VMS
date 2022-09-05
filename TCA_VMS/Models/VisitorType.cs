@@ -11,5 +11,13 @@
         public int VisitorType_Badge_InUse { get; set; }
         public DateTime VisitorType_Badge_Creation_Date { get; set; }
         public int Base_Id { get; set; }
+
+        public class VisitorTypePrqst
+        {
+            public string VisitorType_Name { get; set; }
+            public string VisitorType_Bagde_Color { get; set; }
+            public string VisitorType_Bagde_Number { get; set; }
+            public int Base_Id { get; set; }
+        }
     }
 }

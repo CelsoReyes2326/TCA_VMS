@@ -35,7 +35,7 @@ namespace TCA_VMS.Models.DAO
                 {
                     case DBConn.ServidorLocal:
 
-                        _conn = new SqlConnection("Data Source=DESKTOP-GNCSA92\\SQLEXPRESS;Initial Catalog=Trancasa_Visitors_Management;Persist Security Info=True;User ID=sa;Password=123456");
+                        _conn = new SqlConnection("Data Source=CREYES-WK01\\SQLEXPRESS;Initial Catalog=Trancasa_Visitors_Management;Persist Security Info=True;User ID=sa;Password=123456");
                         break;
                     case DBConn.Server1:
                         _conn = new SqlConnection("Data Source=DESKTOP-GNCSA92\\SQLEXPRESS\\SQLEXPRESS;Initial Catalog=TCA_Formularios;Persist Security Info=True;User ID=sa;Password=123456");

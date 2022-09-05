@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TCA_VMS.Models;
 using TCA_VMS.Models.DAO;
+using static TCA_VMS.Models.VisitorType;
 
 namespace TCA_VMS.Controllers
 {
@@ -39,7 +40,7 @@ namespace TCA_VMS.Controllers
 
 
         [HttpPost("CreateVisitorType")]
-        public IActionResult Create_IDType([FromBody] VisitorType _VisitorType)
+        public IActionResult Create_IDType([FromBody] VisitorTypePrqst _VisitorType)
         {
 
             Result result = new Result();
@@ -71,6 +72,7 @@ namespace TCA_VMS.Controllers
                 result.Message = "Campos incompletos.";
                 result.State = 400;
                 return BadRequest(result);
+
             }
         }
     }

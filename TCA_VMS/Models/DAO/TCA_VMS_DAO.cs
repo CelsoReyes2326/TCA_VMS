@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Text;
+using static TCA_VMS.Models.VisitorType;
 
 namespace TCA_VMS.Models.DAO
 {
@@ -497,7 +498,7 @@ namespace TCA_VMS.Models.DAO
             return result;
         }
 
-        public static List<User> GetUsers(string userTypeName)
+        public static List<User> GetUsers()
         {
             List<User> lstUsers = null;
             var spOption = 3;
@@ -506,7 +507,7 @@ namespace TCA_VMS.Models.DAO
                 try
                 {
                     DataTable dt = bl.AddParam("@SpOption",spOption)
-                        .AddParam("@userTypeName",userTypeName)
+                        //.AddParam("@userTypeName",userTypeName)
                         .ProcedureDataTable(Business.DBConn.ServidorLocal, "[Visit].[UsersProcedures]");
                     if (dt.Rows.Count > 0)
                     {
@@ -903,7 +904,7 @@ namespace TCA_VMS.Models.DAO
 
         #region VisitorType
 
-        public static Result StoreVisitorType(VisitorType _visitorType)
+        public static Result StoreVisitorType(VisitorTypePrqst _visitorType)
         {
             Result result = new Result();
             var spOption = 1;
